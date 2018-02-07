@@ -1,31 +1,31 @@
 import sqlite3
 import pandas as pd
 import numpy as np
-from scipy.sparse import csc_matrix
-from lightfm import LightFM
+from surprise import KNNBasic, Dataset, Reader
 
-# function adds new order to matrix
-def new_order(shopping_cart, df):
-    temp = pd.DataFrame(0, index=np.arange(1), columns = np.arange(df.shape[1]))
-    temp.columns = df.columns
-    for i in shopping_cart:
-        temp.ix[0,i] = 1
-    return(df.append(temp))
+'''takes order_id, aisle_id, and rating and 
+returns recommender from package surprise'''
+def build_recommender(data):
+  reader = Reader(rating_scale = (1,10))
+  data = Dataset.load_from_df(data, reader)
+  sim_options = {'name': 'cosine', 'user_based': False}
+  knn = KNNBasic(sim_options = sim_options)
+  data = data.build_full_trainset()
+  return(knn.fit(data))
 
-# builds recommender with new order included
-def train_model(df):
-    df.sparse = csc_matrix(df)
-    model = LightFM(loss='warp')
-    model.fit(df.sparse, epochs = 10, num_threads = 1)
-    return(model)
+'''takes item_id and returns aisle_id'''
+def item_to_aisle(item, products):
+  a_id = products[products.product_id == item].aisle_id
+  return(a_id.values[0])
 
-def get_recs(model, shopping_cart, df, aisles):
-    other_products = np.array(df.columns.drop(shopping_cart))
-    scores = model.predict(0, np.array(other_products))
-    top_items = np.argsort(-scores)[0:3]
-    
-    for aid in top_items: 
-        print(aisles[aisles.aisle_id == aid]["aisle"].values[0])
+'''takes an item, translates it to an aisle, finds nearest aisle neighbor
+returns the most popular item in the neighboring aisle'''
+def make_rec(item, knn, pop_dict, products):
+    aisle = item_to_aisle(item, products)
+    neighbor = knn.get_neighbors(aisle, k = 1)[0]
+    item = pop_dict['product_name'][neighbor]
+    return(item)
+
 
 
 
@@ -35,13 +35,24 @@ if __name__ == "__main__":
   conn = sqlite3.connect("../instacart.db")
 
   #read in dataframes from database
-  matrix = pd.read_sql_query("SELECT * FROM matrix", conn)
-  aisles = pd.read_sql_query("SELECT * FROM aisles", conn)
+  rec_data = pd.read_sql_query("SELECT * FROM rec_data", conn)
+  pop_items = pd.read_sql_query("SELECT * FROM pop_items", conn)
+  products = pd.read_sql_query("SELECT product_id, aisle_id FROM products", conn)
 
-  # new user example
-  shopping_cart = ['1'] # user input
-  ORDER = new_order(shopping_cart, matrix)
+  #pop_items --> dictionary
+  pop_dict = pop_items.to_dict()
+  #print(pop_dict['product_name'][131])
 
-  # train model with new order data
-  model = train_model(ORDER)
+  item = input("What do you want to buy? ")
+  item = int(item)
+  rec = build_recommender(rec_data)
+
+  print(make_rec(item, rec, pop_dict, products))
+
+
+
+
+
+
+
 
