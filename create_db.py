@@ -10,9 +10,6 @@ def csv_to_db(name, filepath, con):
   df.to_sql(name, con, if_exists ='replace', index=False)
 
 
-def 
-
-
 if __name__ == "__main__":
   con = sqlite3.connect("instacart.db")
   cur = con.cursor()
