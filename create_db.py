@@ -42,8 +42,6 @@ if __name__ == "__main__":
   products = pd.read_csv("../instacart_2017_05_01/products.csv")
   aisles = pd.read_csv("../instacart_2017_05_01/aisles.csv")
 
-  orders.to_sql("orders", con, if_exists='replace', index=False)
-  products.to_sql("products", con, if_exists='replace', index=False)
-  aisles.to_sql("aisles", con, if_exists='replace', index=False)
-
-  # test commit 
+  orders.head().to_sql("orders", con, if_exists='replace', index=False)
+  products.head().to_sql("products", con, if_exists='replace', index=False)
+  aisles.head().to_sql("aisles", con, if_exists='replace', index=False)
