@@ -1,19 +1,47 @@
-from App import db
+#from App import db
 import pandas as pd
-import sqlite3
-from sqlalchemy import create_engine
+import sqlalchemy
+from sqlalchemy import create_engine, MetaData, Integer, Float, Table, Column, String
+from sqlalchemy import MetaData
+import config
+import os
+import psycopg2
 
 
+class db_define(object):
+  engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
+  meta = MetaData(bind=engine)
 
-def csv_to_db(name, filepath, con):
-  df = pd.read_csv(filepath)
-  df.to_sql(name, con, if_exists ='replace', index=False)
+  orders = Table('orders', meta,
+    Column('order_id', Integer, primary_key=True, autoincrement=False),
+    Column('product_id', Integer, nullable=True),
+    Column('add_to_cart_order', Integer, nullable=True),
+    Column('reordered', String, nullable=True)
+  )
+
+  products = Table('products', meta,
+    Column('product_id', Integer, primary_key=True, autoincrement=False),
+    Column('product_name', String, nullable=True),
+    Column('aisle_id', Integer, nullable=True),
+    Column('department_id', Integer, nullable=True)
+    )
+ 
+  aisle = Table('aisle', meta,
+    Column('aisle_id', Integer, primary_key=True, autoincrement=False),
+    Column('aisle', String, nullable=True),
+    )
 
 
 if __name__ == "__main__":
-  con = sqlite3.connect("instacart.db")
-  cur = con.cursor()
+  db = db_define()
+  db.meta.create_all(db.engine)
 
-  csv_to_db("orders","../instacart_2017_05_01/order_products__train.csv", con)
-  csv_to_db("products", "../instacart_2017_05_01/products.csv", con)
-  csv_to_db("aisles", "../instacart_2017_05_01/aisles.csv", con)
+  con = create_engine(os.environ.get("DATABASE_URL"))
+
+  orders = pd.read_csv("../instacart_2017_05_01/order_products__train.csv")
+  products = pd.read_csv("../instacart_2017_05_01/products.csv")
+  aisles = pd.read_csv("../instacart_2017_05_01/aisles.csv")
+
+  orders.to_sql("orders", con, if_exists='replace', index=False)
+  products.to_sql("products", con, if_exists='replace', index=False)
+  aisles.to_sql("aisles", con, if_exists='replace', index=False)

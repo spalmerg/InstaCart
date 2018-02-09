@@ -41,13 +41,22 @@ if __name__ == "__main__":
 
   #pop_items --> dictionary
   pop_dict = pop_items.to_dict()
-  #print(pop_dict['product_name'][131])
 
-  item = input("What do you want to buy? ")
-  item = int(item)
+
   rec = build_recommender(rec_data)
 
-  print(make_rec(item, rec, pop_dict, products))
+  print("#################")
+
+  item = 1
+  while(item != -1):
+    item = input("What do you want to buy? (item_id, -1 quits)")
+    item = int(item)
+    if(item != -1):
+      print(make_rec(item, rec, pop_dict, products))
+  
+
+
+
 
 
 
