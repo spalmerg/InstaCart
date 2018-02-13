@@ -26,7 +26,7 @@ def build_recommender(data):
   pickled KNN recommendation engine. 
 
   Args: 
-    data: dataframe with columns order_id, product_id, and rating
+    param1: dataframe with columns order_id, product_id, and rating
 
   """
   reader = Reader(rating_scale = (max(data.rating),0))
@@ -42,8 +42,8 @@ def give_recommendation(model, raw_id):
   items if the original item was not in the training set. 
   
   Args: 
-    model: trained KNN model from surprise package
-    raw_id: the raw_id (InstCart ID) for the item
+    param1: trained KNN model from surprise package
+    param2: the raw_id (InstCart ID) for the item
 
   Returns: 
     Five recommendation items, five closest neighbors if known 

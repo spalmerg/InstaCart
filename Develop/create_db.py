@@ -7,12 +7,29 @@ import psycopg2
 import io
 
 def format_recommend(orders):
+  """ This function takes the InstaCart orders dataframe 
+  and returns formats the dataframe for the surprise 
+  recommendation library.
+
+  Args: 
+    orders(csv): Instacart order_products__train.csv
+
+  Returns:
+    Dataframe with columns order_id, product_id, and rating
+
+  """
   orders['ratings'] = np.log(orders.add_to_cart_order)
   orders = orders[['order_id', 'product_id','ratings']]
   return(orders)
 
-class db_define(object):
-  engine = create_engine(config.SQLALCHEMY_DATABASE_URI)
+def db_define(env):
+  """ This class defines the database schema 
+  
+  Args:
+    env: database connection object
+
+  """
+  engine = create_engine(env)#
   meta = MetaData(bind=engine)
 
   recommend = Table('recommend', meta,
@@ -31,7 +48,7 @@ class db_define(object):
 
 if __name__ == "__main__":
   #set up database and connection
-  db = db_define()
+  db = db_define(os.environ.get("DATABASE_URL"))
   connection = psycopg2.connect(
     dbname = os.getenv("DATABASE"),
     user = os.getenv("USERNAME"),
@@ -41,8 +58,8 @@ if __name__ == "__main__":
   cur = connection.cursor()
 
 #read in csvs
-  orders = pd.read_csv("Data/order_products__train.csv")
-  products = pd.read_csv("Data/products.csv")
+  orders = pd.read_csv("../Data/order_products__train.csv")
+  products = pd.read_csv("../Data/products.csv")
 
 #reformat recommend table
   recommend = format_recommend(orders)

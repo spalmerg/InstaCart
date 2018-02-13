@@ -1,0 +1,165 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Data ingestion and model fitting &#8212; InstaCart Recommender 1.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to InstaCart Recommender’s documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-create_db">
+<span id="data-ingestion-and-model-fitting"></span><h1>Data ingestion and model fitting<a class="headerlink" href="#module-create_db" title="Permalink to this headline">¶</a></h1>
+<dl class="function">
+<dt id="create_db.db_define">
+<code class="descclassname">create_db.</code><code class="descname">db_define</code><span class="sig-paren">(</span><em>env</em><span class="sig-paren">)</span><a class="headerlink" href="#create_db.db_define" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class defines the database schema</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>env: database connection object</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="create_db.format_recommend">
+<code class="descclassname">create_db.</code><code class="descname">format_recommend</code><span class="sig-paren">(</span><em>orders</em><span class="sig-paren">)</span><a class="headerlink" href="#create_db.format_recommend" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes the InstaCart orders dataframe 
+and returns formats the dataframe for the surprise 
+recommendation library.</p>
+<dl class="docutils">
+<dt>Args: </dt>
+<dd>orders(csv): Instacart order_products__train.csv</dd>
+<dt>Returns:</dt>
+<dd>Dataframe with columns order_id, product_id, and rating</dd>
+</dl>
+</dd></dl>
+
+<span class="target" id="module-model"></span><dl class="function">
+<dt id="model.build_recommender">
+<code class="descclassname">model.</code><code class="descname">build_recommender</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#model.build_recommender" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes order, item, and rating data and exports a 
+pickled KNN recommendation engine.</p>
+<dl class="docutils">
+<dt>Args: </dt>
+<dd>data: dataframe with columns order_id, product_id, and rating</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.get_data">
+<code class="descclassname">model.</code><code class="descname">get_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#model.get_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function connects to the database and returns a dataframe
+with order_id, product_id, and rating to be used in building the 
+recommendation engine.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="model.give_recommendation">
+<code class="descclassname">model.</code><code class="descname">give_recommendation</code><span class="sig-paren">(</span><em>model</em>, <em>raw_id</em><span class="sig-paren">)</span><a class="headerlink" href="#model.give_recommendation" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes a KNN model and a raw_id as input 
+and returns the five nearest neighbors to the original item 
+if the item was in the training set or the five most popular
+items if the original item was not in the training set.</p>
+<dl class="docutils">
+<dt>Args: </dt>
+<dd>model: trained KNN model from surprise package
+raw_id: the raw_id (InstCart ID) for the item</dd>
+<dt>Returns: </dt>
+<dd>Five recommendation items, five closest neighbors if known 
+item or five most popular items if unknown item.</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">InstaCart Recommender</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Data ingestion and model fitting</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to InstaCart Recommender’s documentation!</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018, Sarah Greenwood.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/code.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
