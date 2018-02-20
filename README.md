@@ -13,16 +13,6 @@ Create the basic skeleton of a web app that implements a recommender system resp
 * [Surprise](http://surpriselib.com/) 
     * Surprise is a Python scikit building and analyzing recommender systems
     * Surprise is used to build the a collaborative filtering recommender system for the app
-
-## Components 
-* Relational database 
-* Data model 
-* View(s)
-* Templates 
-    * HTML 
-* Static files
-    * CSS
-    * JS
  
 ## Suggested steps
 
