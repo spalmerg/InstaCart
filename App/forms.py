@@ -10,5 +10,3 @@ choices = pickle.load(open("Develop/Model/rid_to_name.pkl", "rb")).items()
 class OrderForm(FlaskForm):
  item = SelectField(label='Item', choices=choices)
  submit = SubmitField('Add to cart')
-
-
