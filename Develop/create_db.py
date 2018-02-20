@@ -9,7 +9,8 @@ import io
 def format_recommend(orders):
   """ This function takes the InstaCart orders dataframe 
   and returns formats the dataframe for the surprise 
-  recommendation library.
+  recommendation library of the top 250 products sold by 
+  InstaCart for model and app simplicity. 
 
   Args: 
     orders(csv): Instacart order_products__train.csv
@@ -18,6 +19,9 @@ def format_recommend(orders):
     Dataframe with columns order_id, product_id, and rating
 
   """
+  counts = orders['product_id'].value_counts().reset_index().head(250)
+  counts.columns = ['product_id', 'frequency_count']
+  orders = orders[orders.product_id.isin(counts.product_id)]
   orders['ratings'] = np.log(orders.add_to_cart_order)
   orders = orders[['order_id', 'product_id','ratings']]
   return(orders)
@@ -29,7 +33,7 @@ def db_define(env):
     env: database connection object
 
   """
-  engine = create_engine(env)#
+  engine = create_engine(env)
   meta = MetaData(bind=engine)
 
   recommend = Table('recommend', meta,
