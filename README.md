@@ -10,6 +10,9 @@ Create the basic skeleton of a web app that implements a recommender system resp
     * A flask plugin for [SQLAlchemy](http://www.sqlalchemy.org/). SQLAlchemy is an Object Relational Mapper (ORM), which means it allows interaction with relational data models using object oriented approaches, like those typically used in python. 
     * This project uses SQLAlchemy to create, read from, and write to relational databases. 
     * SQLAlchemy's flexibility will allow for a smooth transition from using a local database to using something like Amazon RDS. All that needs to change is a configuration in the app code (see [this blog](https://medium.com/@rodkey/deploying-a-flask-application-on-aws-a72daba6bb80) for more on transition to RDS)
+* [Surprise](http://surpriselib.com/) 
+    * Surprise is a Python scikit building and analyzing recommender systems
+    * Surprise is used to build the a collaborative filtering recommender system for the app
 
 ## Components 
 * Relational database 
