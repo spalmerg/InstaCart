@@ -22,8 +22,8 @@ def format_recommend(orders):
   counts = orders['product_id'].value_counts().reset_index().head(250)
   counts.columns = ['product_id', 'frequency_count']
   orders = orders[orders.product_id.isin(counts.product_id)]
-  orders['ratings'] = np.log(orders.add_to_cart_order)
-  orders = orders[['order_id', 'product_id','ratings']]
+  orders['rating'] = np.log(orders.add_to_cart_order)
+  orders = orders[['order_id', 'product_id','rating']]
   return(orders)
 
 def db_define(env):
