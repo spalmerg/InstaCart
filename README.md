@@ -45,15 +45,19 @@ Create the basic skeleton of a web app that implements a recommender system resp
    export HOST=XXX``` 
 
 6. Set your environment
+
    ```source instacart.env```
 
 7. Load database 
+
     ```python create_db.py```
     
 8. Create the model 
+
    ```python model.py```
    
 9. Run the app
+
    ```python instaApp.py```
 
 You should be able to go to the IP address that it responds with and see your web app.
