@@ -20,15 +20,15 @@ Create the basic skeleton of a web app that implements a recommender system resp
 
 2. Create virtual environment for new app 
 
-    `virtualenv -p python3 Instacart`
+    ```virtualenv -p python3 Instacart```
     
 3. Activate environment
 
-    `source activate Instacart`
+    ```source activate Instacart```
 
 4. Install required packages 
 
-    `pip install requirements.txt`
+    ```pip install -r requirements.txt```
 
 5. Download InstaCart csv files from [Kaggle](https://www.kaggle.com/c/instacart-market-basket-analysis/data) and save to Data folder
 
@@ -45,15 +45,15 @@ Create the basic skeleton of a web app that implements a recommender system resp
    export HOST=XXX``` 
 
 6. Set your environment
-   `source instacart.env`
+   ```source instacart.env```
 
 7. Load database 
-    `python create_db.py`
+    ```python create_db.py```
     
 8. Create the model 
-   ` python model.py`
+   ```python model.py```
    
 9. Run the app
-   `python instaApp.py`
+   ```python instaApp.py```
 
 You should be able to go to the IP address that it responds with and see your web app.
