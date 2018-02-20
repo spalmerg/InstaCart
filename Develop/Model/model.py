@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 import numpy as np
-from surprise import KNNBasic, Dataset, Reader
+from surprise import KNNBaseline, Dataset, Reader
 import os
 import pickle
 
@@ -17,7 +17,7 @@ def get_data():
     password = os.getenv("PASSWORD"),
     host = os.getenv("HOST"))
   cur = connection.cursor()
-  cur.execute("SELECT * FROM recommend;") # this should be as big as possible
+  cur.execute("SELECT * FROM recommend;")
   table = pd.DataFrame(cur.fetchall(), columns=['order_id', 'product_id', 'rating'])
   return(table)
 
@@ -31,7 +31,7 @@ def build_recommender(data):
   """
   reader = Reader(rating_scale = (max(data.rating),0))
   data = Dataset.load_from_df(data, reader)
-  knn = KNNBasic(sim_options = {'name': 'cosine', 'user_based': False})
+  knn = KNNBaseline(k=10, sim_options = {'name': 'pearson_baseline', 'user_based': False})
   data = data.build_full_trainset()
   fit = knn.fit(data)
   pickle.dump(fit, open('model.pkl', 'wb'))
