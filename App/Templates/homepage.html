@@ -1,14 +1,25 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="../static/style.css"/>
+
 <head>
-  <title>{{ title }} - INSTACART</title>
+  <title>INSTACART</title>
 </head>
+
 <body>
   <h2>Order something tasty</h2>
-    <form action="{{ url_for('homepage') }}" method="post">
+    <form class="form-style-1" action="{{ url_for('homepage') }}" method="post">
       {{ form.hidden_tag() }}
       <p>
           {{ form.item.label }}<br>
-          {{ form.item(size=32) }}
+          {{ form.item(size=40) }}
       </p>
       <p>{{ form.submit() }}</p>
   </form>
- </body>
+</body>
+
+<script>
+
+</script>
+
+<script type="text/javascript" src="scripts/data/time.js"></script>
