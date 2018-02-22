@@ -1,7 +1,7 @@
 import psycopg2
 import pandas as pd
 import numpy as np
-from surprise import KNNBaseline, Dataset, Reader
+from surprise import KNNBaseline
 import os
 import pickle
 
@@ -29,6 +29,7 @@ def build_recommender(data):
     data: dataframe with columns order_id, product_id, and rating
 
   """
+  from surprise import Dataset, Reader
   reader = Reader(rating_scale = (max(data.rating),0))
   data = Dataset.load_from_df(data, reader)
   knn = KNNBaseline(k=10, sim_options = {'name': 'pearson_baseline', 'user_based': False})
