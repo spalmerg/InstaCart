@@ -2,11 +2,11 @@ from flask import render_template, flash, request, redirect
 from App import app
 from wtforms import validators
 from App.forms import OrderForm, FlaskForm
-from Develop.Model.model import give_recommendation
+from analyze.src.models.model import give_recommendation
 import pickle
 
-model = pickle.load(open("Develop/Model/model.pkl", "rb"))
-choices = pickle.load(open("Develop/Model/rid_to_name.pkl", "rb"))
+model = pickle.load(open("analyze/models/model.pkl", "rb"))
+choices = pickle.load(open("analyze/models/rid_to_name.pkl", "rb"))
 
 @app.route('/', methods=['GET'])
 @app.route('/homepage', methods=['GET', 'POST'])
