@@ -62,8 +62,8 @@ if __name__ == "__main__":
   cur = connection.cursor()
 
 #read in csvs
-  orders = pd.read_csv("../Data/order_products__train.csv")
-  products = pd.read_csv("../Data/products.csv")
+  orders = pd.read_csv("analyze/data/order_products__train.csv")
+  products = pd.read_csv("analyze/data/products.csv")
 
 #reformat recommend table
   recommend = format_recommend(orders)
