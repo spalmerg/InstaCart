@@ -1,23 +1,22 @@
 from flask import render_template, flash, request, redirect
 from App import app
-from wtforms import StringField, validators
+from wtforms import validators
 from App.forms import OrderForm, FlaskForm
+from analyze.src.models.model import give_recommendation
 import pickle
 
-model = pickle.load(open("App/model.pkl", "rb"))
+model = pickle.load(open("analyze/models/model.pkl", "rb"))
+choices = pickle.load(open("analyze/models/rid_to_name.pkl", "rb"))
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 @app.route('/homepage', methods=['GET', 'POST'])
 def homepage():
-  form = OrderForm(request.form)
-  
-  print(form.errors)
-  if request.method == 'POST':
-    item = request.form['item']
+  form=OrderForm(request.form)
 
+  if request.method == 'POST':
+    item=request.form['item']
     if form.validate():
-      neighbors = model.get_neighbors(int(item),5)
-      neighbors = [model.trainset.to_raw_iid(inner_id) for inner_id in neighbors]
+      neighbors=give_recommendation(model,item,choices)
       return render_template('/thankyou.html', item=neighbors)
     else:
       flash("We don't have that item")
