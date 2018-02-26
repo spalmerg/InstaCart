@@ -5,6 +5,7 @@ import os
 import pickle
 import logging
 
+
 def build_recommender(data):
   """ This function takes order, item, and rating data returns a
   KNN recommendation engine. 
@@ -17,7 +18,7 @@ def build_recommender(data):
   from surprise import Dataset, Reader
 
   logging.info('Setting up Surprise data reader')
-  reader = Reader(rating_scale = (max(data.rating),0))
+  reader = Reader(rating_scale = (max(data.rating),min(data.rating)))
 
   logging.info('Calling load_from_df')
   data = Dataset.load_from_df(data, reader)
@@ -50,11 +51,13 @@ def give_recommendation(model, raw_id, key):
     item or five most popular items if unknown item. 
 
   """
+  neighbors = {}
   try:
     inner_id = model.trainset.to_inner_iid(int(raw_id))
     inner_rec = model.get_neighbors(inner_id, 5)
     raw_recs = [model.trainset.to_raw_iid(inner_id) for inner_id in inner_rec]
-    neighbors = [key[str(rid)] for rid in raw_recs]
+    for rid in raw_recs:
+      neighbors[str(rid)] = key[str(rid)]
     return(neighbors)
   except: 
     return("RECOMMEND POPULAR ITEMS")

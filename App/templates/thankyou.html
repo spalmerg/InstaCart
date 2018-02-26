@@ -3,11 +3,16 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
 
 <head>
-  <title>{{ title }} - INSTACART</title>
+  <title>Instacart</title>
 </head>
 <body>
-  <h2>You should buy:</h2>
-    <p>
-      {{ item }}
-    </p>
+  <h2>You added {{ item }} to your cart!</h2>
+    <form class="form-style-1" action="{{ url_for('thankyou') }}" method="post">
+      {{ form.hidden_tag() }}
+      <p>
+          {{ form.item.label }}<br>
+          {{ form.item(size=5) }}
+      </p>
+      <p>{{ form.yes() }} {{ form.no() }}</p>
+    </form>
  </body>
