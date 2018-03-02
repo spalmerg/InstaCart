@@ -14,9 +14,9 @@ class OrderForm(FlaskForm):
 
 class RecommendForm(FlaskForm):
   item=SelectField(label='Would you also like to buy')
-  yes = SubmitField('Yes')
-  no = SubmitField('No, Add New Item')
+  submit = SubmitField("MEOW WOOF MOO")
+  #yes = SubmitField('Yes')
+  #no = SubmitField('No, Add New Item')
   
   def set_choices(self, recs):
     self.item.choices = recs
-

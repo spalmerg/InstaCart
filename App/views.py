@@ -23,20 +23,24 @@ def homepage():
       flash("We don't have that item")
   return render_template('homepage.html', form=form)
 
-@app.route('/thankyou')
+
+@app.route('/thankyou', methods=['GET', 'POST'])
 def thankyou():
   #declare recommender form
   rec_form=RecommendForm()
 
-  #get item ordered from homepage
-  item = request.args.get('item')
-
-  #get recommendations generated
-  temp = request.args.get('recs')
-
-  # translate recommendations to dictionary for new form
-  temp = ast.literal_eval(temp)
-  rec_form.set_choices(temp.items())
+  if request.method == 'GET':
+    #get item ordered from homepage
+    item = request.args.get('item')
+  
+    #get recommendations generated
+    temp = request.args.get('recs')
+  
+    # translate recommendations to dictionary for new form
+    temp = ast.literal_eval(temp)
+    rec_form.set_choices(temp.items())
+  if request.method == 'POST':
+    return redirect(url_for('homepage'))
 
   #display new page and custom form and heading
   return render_template('thankyou.html', form=rec_form, item=item)

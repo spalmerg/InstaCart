@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
-# InstaCart Recommender documentation build configuration file, created by
-# sphinx-quickstart on Mon Feb 12 21:49:53 2018.
+# Instcart Recommender documentation build configuration file, created by
+# sphinx-quickstart on Fri Mar  2 13:44:30 2018.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -17,11 +17,18 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+# import os
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
+
 import os
 import sys
 sys.path.insert(0, os.path.abspath('.'))
-sys.path.append('../Develop')
-sys.path.append('../App')
+sys.path.append('../analyze/src')
+sys.path.append('../analyze/src/features')
+sys.path.append('../analyze/src/models')
+sys.path.append('../analyze')
+sys.path.append('../')
 
 
 # -- General configuration ------------------------------------------------
@@ -38,8 +45,6 @@ extensions = ['sphinx.ext.autodoc']
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
-autodoc_mock_imports = ['sqlalchemy', '']
-
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
@@ -50,7 +55,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'InstaCart Recommender'
+project = 'Instcart Recommender'
 copyright = '2018, Sarah Greenwood'
 author = 'Sarah Greenwood'
 
@@ -119,7 +124,7 @@ html_sidebars = {
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'InstaCartRecommenderdoc'
+htmlhelp_basename = 'InstcartRecommenderdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -146,7 +151,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'InstaCartRecommender.tex', 'InstaCart Recommender Documentation',
+    (master_doc, 'InstcartRecommender.tex', 'Instcart Recommender Documentation',
      'Sarah Greenwood', 'manual'),
 ]
 
@@ -156,7 +161,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'instacartrecommender', 'InstaCart Recommender Documentation',
+    (master_doc, 'instcartrecommender', 'Instcart Recommender Documentation',
      [author], 1)
 ]
 
@@ -167,8 +172,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'InstaCartRecommender', 'InstaCart Recommender Documentation',
-     author, 'InstaCartRecommender', 'One line description of project.',
+    (master_doc, 'InstcartRecommender', 'Instcart Recommender Documentation',
+     author, 'InstcartRecommender', 'One line description of project.',
      'Miscellaneous'),
 ]
 
