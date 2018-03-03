@@ -27,19 +27,19 @@ def read_item_names(products, fit):
 
 if __name__ == "__main__":
   log_fmt = '%(asctime)s -  %(levelname)s - %(message)s'
-  logging.basicConfig(filename='build_key.log', level=logging.INFO, format=log_fmt)
+  logging.basicConfig(filename='setup.log', level=logging.INFO, format=log_fmt)
   logger = logging.getLogger(__name__)
   
   logger.info('Reading in products dataframe')
-  products = pd.read_csv("../../data/products.csv")
+  products = pd.read_csv("data/products.csv")
 
   logger.info('Unpickle model')
-  model = pickle.load(open("../../models/model.pkl", "rb"))
+  model = pickle.load(open("models/model.pkl", "rb"))
 
   logger.info('Call read_item_names')
   key = read_item_names(products, model)
 
   logger.info('Pickle key')
-  pickle.dump(key, open('../../models/rid_to_name.pkl', 'wb'))
+  pickle.dump(key, open('models/rid_to_name.pkl', 'wb'))
 
   logger.info('Key export successful')

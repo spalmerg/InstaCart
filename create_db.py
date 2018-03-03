@@ -43,9 +43,8 @@ def add_order(order):
   host = os.getenv("HOST")
   )
   cur = connection.cursor()
-  for woof in order.keys():
-    print(woof)
-    cur.execute("INSERT INTO rec_orders (item_id, was_rec) VALUES (%s,%s)", (woof,order[woof]))
+  for id in order.keys():
+    cur.execute("INSERT INTO rec_orders (item_id, was_rec) VALUES (%s,%s)", (id,order[id]))
   connection.commit()
   connection.close()
 

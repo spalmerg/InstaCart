@@ -1,12 +1,14 @@
 import pandas as pd
 import numpy as np
+import random 
 from surprise import KNNBaseline
 import os
 import pickle
 import logging
+import yaml
 
 
-def build_recommender(data):
+def build_recommender(data, model_meta):
   """ This function takes order, item, and rating data returns a
   KNN recommendation engine. 
 
@@ -17,6 +19,10 @@ def build_recommender(data):
   # import libraries in function to help EB 
   from surprise import Dataset, Reader
 
+  logging.info('Setting up random state')
+  random.seed(model_meta['train_recommender']['random_state'])
+  np.random.seed(model_meta['train_recommender']['random_state'])
+
   logging.info('Setting up Surprise data reader')
   reader = Reader(rating_scale = (max(data.rating),min(data.rating)))
 
@@ -24,7 +30,9 @@ def build_recommender(data):
   data = Dataset.load_from_df(data, reader)
 
   logging.info('Setting up recommender')
-  knn = KNNBaseline(k=10, sim_options = {'name': 'pearson_baseline', 'user_based': False})
+  k = model_meta['train_recommender']['neighbors']
+  sim_options = model_meta['train_recommender']['sim_options']
+  knn = KNNBaseline(k, sim_options = sim_options)
 
   logging.info('Calling build_full_trainset')
   data = data.build_full_trainset()
@@ -66,17 +74,21 @@ def give_recommendation(model, raw_id, key):
 
 if __name__ == "__main__":
   log_fmt = '%(asctime)s -  %(levelname)s - %(message)s'
-  logging.basicConfig(filename='model.log', level=logging.INFO, format=log_fmt)
+  logging.basicConfig(filename='setup.log', level=logging.INFO, format=log_fmt)
   logger = logging.getLogger(__name__)
 
   logging.info('Reading in surprise csv')
-  recommend = pd.read_csv("../../data/surprise.csv")
+  recommend = pd.read_csv("data/surprise.csv")
+
+  logging.info('Reading in yaml file')
+  with open('model_meta.yaml', 'r') as f:
+        model_meta = yaml.load(f)
 
   logging.info('Building recommendation engine')
-  fit = build_recommender(recommend)
+  fit = build_recommender(recommend, model_meta)
 
   logging.info('Pickling recommendation engine')
-  pickle.dump(fit, open('../../models/model.pkl', 'wb'))
+  pickle.dump(fit, open('models/model.pkl', 'wb'))
 
   logging.info('Pickling complete')
 
