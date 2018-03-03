@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+{% extends "base.html" %}
 
-<head>
-  <title>Instacart</title>
-</head>
-
+{% block content %}
 <body>
-  <h2>Order something tasty</h2>
+  <h2>Add to your order</h2>
     <form class="form-style-1" action="{{ url_for('homepage') }}" method="post">
-      {{ form.hidden_tag() }}
       <p>
           {{ form.item.label }}<br>
           {{ form.item(size=40) }}
@@ -17,3 +11,4 @@
       <p>{{ form.submit() }}</p>
   </form>
 </body>
+{% endblock %}

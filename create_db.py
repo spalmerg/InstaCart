@@ -1,5 +1,4 @@
-import pandas as pd
-from sqlalchemy import create_engine, MetaData, Integer, Float, Table, Column, String
+from sqlalchemy import create_engine, MetaData, Integer, Table, Column, Boolean
 import config
 import os
 import psycopg2
@@ -7,7 +6,7 @@ import io
 import logging
 
 def db_define(env):
-  """ This class defines the database schema 
+  """ This function defines the database schema 
   
   Args:
     env: database connection object
@@ -18,14 +17,37 @@ def db_define(env):
   meta = MetaData(bind=engine)
 
   logger.info('Define table')
-  recommend = Table('recommend', meta,
-    Column('order_id', Integer, primary_key=True, autoincrement=False),
-    Column('product_id', Integer, primary_key=True, autoincrement=False),
-    Column('rating', Float, nullable=True),
+  rec_orders = Table('rec_orders', meta,
+    Column('order_item_id', Integer, primary_key=True, autoincrement=True),
+    Column('item_id', Integer, primary_key=False, autoincrement=False),
+    Column('was_rec', Boolean, nullable=True),
   )
 
   logger.info('Call create_all()')
   meta.create_all()
+
+def add_order(order):
+  """ This function takes a dictionary of order items
+  and adds the item id and whether or not it was a 
+  recommended item to the database
+
+  Args:
+    order: a dictionary formatted item_id:bool which specifies the 
+    ordered item and whether or not it was recommended
+
+  """
+  connection = psycopg2.connect(
+  dbname = os.getenv("DATABASE"),
+  user = os.getenv("USERNAME"),
+  password = os.getenv("PASSWORD"),
+  host = os.getenv("HOST")
+  )
+  cur = connection.cursor()
+  for woof in order.keys():
+    print(woof)
+    cur.execute("INSERT INTO rec_orders (item_id, was_rec) VALUES (%s,%s)", (woof,order[woof]))
+  connection.commit()
+  connection.close()
 
 
 if __name__ == "__main__":
@@ -46,31 +68,3 @@ if __name__ == "__main__":
     host = os.getenv("HOST")
     )
   cur = connection.cursor()
-
-#read in surprise.csv 
-  logger.info('Read in surprise csv')
-  recommend = pd.read_csv("analyze/data/surprise.csv")
-
-#set up buffer
-  logger.info('Set up StringIO')
-  buf_rec = io.StringIO()
-
-#transfer to CSV format
-  logger.info('Tranfer recommend table to csv through buf_rec')
-  recommend.to_csv(buf_rec, header=False, index=False, sep='\t')
-
-#reset the head
-  logger.info('Reset CSV head')
-  buf_rec.seek(0)
-
-#write to database
-  logger.info('Call copy_from')
-  cur.copy_from(buf_rec, 'recommend', columns=('order_id', 'product_id', 'rating'))
-
-  logger.info('Commit to database')
-  connection.commit()
-
-  logger.info('Close database connection')
-  connection.close()
-
-  logger.info('Database load complete')

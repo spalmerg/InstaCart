@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+
+  <head>
+    <title>Instacart</title>
+  </head>
+
+<body>
+
+<div class="topnav">
+  <a href="{{ url_for('thankyou') }}">Checkout</a>
+  <a href="{{ url_for('homepage') }}">Add to Order</a>
+</div>
+  </body>
+
+<div class="padding">
+{% block content %}{% endblock %}
+</div>  
+
+</html
