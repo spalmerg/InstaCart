@@ -1,0 +1,7 @@
+train_recommender: 
+  neighbors: 100
+  sim_options: {name: pearson_baseline, user_based: False}
+  random_state: 12
+
+build_features:
+  item_count: 853

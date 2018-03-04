@@ -1,58 +1,65 @@
-import pandas as pd
-import numpy as np
-from sqlalchemy import create_engine, MetaData, Integer, Float, Table, Column, String
+from sqlalchemy import create_engine, MetaData, Integer, Table, Column, Boolean
 import config
 import os
 import psycopg2
 import io
-
-def format_recommend(orders):
-  """ This function takes the InstaCart orders dataframe 
-  and returns formats the dataframe for the surprise 
-  recommendation library of the top 250 products sold by 
-  InstaCart for model and app simplicity. 
-
-  Args: 
-    orders(csv): Instacart order_products__train.csv
-
-  Returns:
-    Dataframe with columns order_id, product_id, and rating
-
-  """
-  counts = orders['product_id'].value_counts().reset_index().head(250)
-  counts.columns = ['product_id', 'frequency_count']
-  orders = orders[orders.product_id.isin(counts.product_id)]
-  orders['rating'] = np.log(orders.add_to_cart_order)
-  orders = orders[['order_id', 'product_id','rating']]
-  return(orders)
+import logging
 
 def db_define(env):
-  """ This class defines the database schema 
+  """ This function defines the database schema 
   
   Args:
     env: database connection object
 
   """
+  logger.info('sqlalchemy create_engine')
   engine = create_engine(env)
   meta = MetaData(bind=engine)
 
-  recommend = Table('recommend', meta,
-    Column('order_id', Integer, primary_key=True, autoincrement=False),
-    Column('product_id', Integer, primary_key=True, autoincrement=False),
-    Column('rating', Float, nullable=True),
+  logger.info('Define table')
+  rec_orders = Table('rec_orders', meta,
+    Column('order_item_id', Integer, primary_key=True, autoincrement=True),
+    Column('item_id', Integer, primary_key=False, autoincrement=False),
+    Column('was_rec', Boolean, nullable=True),
   )
-  products = Table('products', meta,
-    Column('product_id', Integer, primary_key=True, autoincrement=False),
-    Column('product_name', String, primary_key=True, autoincrement=False),
-    Column('aisle_id', Integer, primary_key=True, autoincrement=False),
-    Column('department_id', Integer, nullable=True),
-  )
+
+  logger.info('Call create_all()')
   meta.create_all()
+
+def add_order(order):
+  """ This function takes a dictionary of order items
+  and adds the item id and whether or not it was a 
+  recommended item to the database
+
+  Args:
+    order: a dictionary formatted item_id:bool which specifies the 
+    ordered item and whether or not it was recommended
+
+  """
+  connection = psycopg2.connect(
+  dbname = os.getenv("DATABASE"),
+  user = os.getenv("USERNAME"),
+  password = os.getenv("PASSWORD"),
+  host = os.getenv("HOST")
+  )
+  cur = connection.cursor()
+  for id in order.keys():
+    cur.execute("INSERT INTO rec_orders (item_id, was_rec) VALUES (%s,%s)", (id,order[id]))
+  connection.commit()
+  connection.close()
 
 
 if __name__ == "__main__":
+  # set up logging
+  log_fmt = '%(asctime)s -  %(levelname)s - %(message)s'
+  logging.basicConfig(filename='create_db.log', level=logging.INFO, format=log_fmt)
+  logger = logging.getLogger(__name__)
+
   #set up database and connection
+  logger.info('Get database url from environment')
   db = db_define(os.environ.get("DATABASE_URL"))
+
+  logger.info('Set up database connection')
   connection = psycopg2.connect(
     dbname = os.getenv("DATABASE"),
     user = os.getenv("USERNAME"),
@@ -60,28 +67,3 @@ if __name__ == "__main__":
     host = os.getenv("HOST")
     )
   cur = connection.cursor()
-
-#read in csvs
-  orders = pd.read_csv("analyze/data/order_products__train.csv")
-  products = pd.read_csv("analyze/data/products.csv")
-
-#reformat recommend table
-  recommend = format_recommend(orders)
-
-#set up buffers
-  buf_prod = io.StringIO()
-  buf_rec = io.StringIO()
-
-#transfer to CSV format
-  products.to_csv(buf_prod, header=False, index=False, sep='\t')
-  recommend.to_csv(buf_rec, header=False, index=False, sep='\t')
-
-#reset the head
-  buf_prod.seek(0)
-  buf_rec.seek(0)
-
-#write to database
-  cur.copy_from(buf_prod, 'products', columns=('product_id','product_name','aisle_id','department_id'))
-  cur.copy_from(buf_rec, 'recommend', columns=('order_id', 'product_id', 'rating'))
-  connection.commit()
-  connection.close()

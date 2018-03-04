@@ -1,13 +1,14 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}"/>
+{% extends "base.html" %}
 
-<head>
-  <title>{{ title }} - INSTACART</title>
-</head>
+{% block content %}
 <body>
-  <h2>You should buy:</h2>
-    <p>
-      {{ item }}
-    </p>
+  <h2>Thank you for shopping!</h2>
+  <form class="form-style-1" action="{{ url_for('thankyou') }}" method="post">
+      <p>
+          {{ form.item.label }}<br>
+          {{ form.item(size=10) }}
+      </p>
+    </form>
+
  </body>
+{% endblock %}

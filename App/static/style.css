@@ -5,34 +5,30 @@ h2 {
     padding: 20px 12px 10px 20px;
     font: 20px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
+h3 {
+    text-align:center;
+    margin:10px auto;
+    max-width: 400px;
+    padding: 20px 12px 10px 20px;
+    font: 16px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
 body{
     text-align:center;
 }
+
 .form-style-1 {
     margin:10px auto;
     max-width: 400px;
     font: 13px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 }
-.form-style-1 li {
-    padding: 0;
-    display: block;
-    list-style: none;
-    margin: 10px 0 0 0;
-}
+
 .form-style-1 label{
     margin:0 0 3px 0;
     padding:0px;
     display:block;
     font-weight: bold;
 }
-.form-style-1 input[type=text], 
-.form-style-1 input[type=date],
-.form-style-1 input[type=datetime],
-.form-style-1 input[type=number],
-.form-style-1 input[type=search],
-.form-style-1 input[type=time],
-.form-style-1 input[type=url],
-.form-style-1 input[type=email],
+
 textarea, 
 select{
     box-sizing: border-box;
@@ -51,9 +47,7 @@ select{
 .form-style-1 .field-select{
     width: 100%;
 }
-.form-style-1 .field-textarea{
-    height: 100px;
-}
+
 .form-style-1 input[type=submit], .form-style-1 input[type=button]{
     background: #4B99AD;
     padding: 8px 15px 8px 15px;
@@ -66,7 +60,26 @@ select{
     -moz-box-shadow:none;
     -webkit-box-shadow:none;
 }
-.form-style-1 .required{
-    color:red;
+
+.topnav {
+  overflow: hidden;
+  background-color: #4B99AD;
+  font: 20px "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+.topnav a {
+  float: right;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.topnav a:hover {
+  background: #4691A4;
+  box-shadow:none;
+  -moz-box-shadow:none;
+  -webkit-box-shadow:none;
 }
 </style>

@@ -1,41 +1,46 @@
-import psycopg2
 import pandas as pd
 import numpy as np
+import random 
 from surprise import KNNBaseline
 import os
 import pickle
+import logging
+import yaml
 
-def get_data():
-  """ This function connects to the database and returns a dataframe
-  with order_id, product_id, and rating to be used in building the 
-  recommendation engine. 
 
-  """
-  connection = psycopg2.connect(
-    dbname = os.getenv("DATABASE"),
-    user = os.getenv("USERNAME"),
-    password = os.getenv("PASSWORD"),
-    host = os.getenv("HOST"))
-  cur = connection.cursor()
-  cur.execute("SELECT * FROM recommend;")
-  table = pd.DataFrame(cur.fetchall(), columns=['order_id', 'product_id', 'rating'])
-  return(table)
-
-def build_recommender(data):
-  """ This function takes order, item, and rating data and exports a 
-  pickled KNN recommendation engine. 
+def build_recommender(data, model_meta):
+  """ This function takes order, item, and rating data returns a
+  KNN recommendation engine. 
 
   Args: 
     data: dataframe with columns order_id, product_id, and rating
 
   """
+  # import libraries in function to help EB 
   from surprise import Dataset, Reader
-  reader = Reader(rating_scale = (max(data.rating),0))
+
+  logging.info('Setting up random state')
+  random.seed(model_meta['train_recommender']['random_state'])
+  np.random.seed(model_meta['train_recommender']['random_state'])
+
+  logging.info('Setting up Surprise data reader')
+  reader = Reader(rating_scale = (max(data.rating),min(data.rating)))
+
+  logging.info('Calling load_from_df')
   data = Dataset.load_from_df(data, reader)
-  knn = KNNBaseline(k=10, sim_options = {'name': 'pearson_baseline', 'user_based': False})
+
+  logging.info('Setting up recommender')
+  k = model_meta['train_recommender']['neighbors']
+  sim_options = model_meta['train_recommender']['sim_options']
+  knn = KNNBaseline(k, sim_options = sim_options)
+
+  logging.info('Calling build_full_trainset')
   data = data.build_full_trainset()
+
+  logging.info('Fit recommender')
   fit = knn.fit(data)
-  pickle.dump(fit, open('model.pkl', 'wb'))
+
+  logging.info('Return recommender')
   return(fit)
 
 def give_recommendation(model, raw_id, key):
@@ -54,53 +59,39 @@ def give_recommendation(model, raw_id, key):
     item or five most popular items if unknown item. 
 
   """
+  neighbors = {}
   try:
     inner_id = model.trainset.to_inner_iid(int(raw_id))
     inner_rec = model.get_neighbors(inner_id, 5)
     raw_recs = [model.trainset.to_raw_iid(inner_id) for inner_id in inner_rec]
-    neighbors = [key[str(rid)] for rid in raw_recs]
+    for rid in raw_recs:
+      neighbors[str(rid)] = key[str(rid)]
     return(neighbors)
   except: 
     return("RECOMMEND POPULAR ITEMS")
 
-def get_products():
-  """ This function connects to the database and returns a the 
-  products dataframe to be used in the read_item_names function
-
-  """
-  connection = psycopg2.connect(
-    dbname = os.getenv("DATABASE"),
-    user = os.getenv("USERNAME"),
-    password = os.getenv("PASSWORD"),
-    host = os.getenv("HOST"))
-  cur = connection.cursor()
-  cur.execute("SELECT * FROM products;")
-  table = pd.DataFrame(cur.fetchall(), columns=['product_id', 'product_name', 'aisle_id', 'department_id'])
-  return(table)
-
-def read_item_names(products,fit):
-  """ This function reads the products table and exports 
-  a pickled key of the product_id and product_name pairs
-
-  Args: 
-    products: the product dataframe read in from get_products()
-    fit: a fitted KNN algorithm
-
-  """
-  rid_to_name = {}
-  for i in range(0,len(products)):
-    try:
-      if fit.trainset.knows_item(fit.trainset.to_inner_iid(products.product_id[i])):
-        rid_to_name[str(products.product_id[i])] = products.product_name[i]
-    except:
-      pass
-  pickle.dump(rid_to_name, open('rid_to_name.pkl', 'wb'))
-
 
 
 if __name__ == "__main__":
-  fit = build_recommender(get_data())
-  read_item_names(get_products(),fit)
+  log_fmt = '%(asctime)s -  %(levelname)s - %(message)s'
+  logging.basicConfig(filename='setup.log', level=logging.INFO, format=log_fmt)
+  logger = logging.getLogger(__name__)
+
+  logging.info('Reading in surprise csv')
+  recommend = pd.read_csv("data/surprise.csv")
+
+  logging.info('Reading in yaml file')
+  with open('model_meta.yaml', 'r') as f:
+        model_meta = yaml.load(f)
+
+  logging.info('Building recommendation engine')
+  fit = build_recommender(recommend, model_meta)
+
+  logging.info('Pickling recommendation engine')
+  pickle.dump(fit, open('models/model.pkl', 'wb'))
+
+  logging.info('Pickling complete')
+
 
 
 

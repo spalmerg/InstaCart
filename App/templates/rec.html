@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+<body>
+  <h2>You added {{ item }} to your cart!</h2>
+    <form class="form-style-1" action="{{ url_for('rec') }}" method="post">
+      <p>
+          {{ form.item.label }}<br>
+          {{ form.item(size=5) }}
+      </p>
+      <p>{{ form.yes() }}  {{ form.no() }}</p>
+    </form>
+ </body>
+
+{% endblock %}
