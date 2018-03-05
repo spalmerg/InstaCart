@@ -1,6 +1,3 @@
-import psycopg2
-import pandas as pd
-import os
 import pickle
 from flask_wtf import FlaskForm
 from wtforms import SelectField, SubmitField

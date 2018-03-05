@@ -1,9 +1,7 @@
-import psycopg2
 import pandas as pd
-import numpy as np
-import os
 import pickle
 import logging
+
 
 def read_item_names(products, fit):
   """ This function reads the products table returns a 

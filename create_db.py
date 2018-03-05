@@ -1,8 +1,6 @@
 from sqlalchemy import create_engine, MetaData, Integer, Table, Column, Boolean
-import config
 import os
 import psycopg2
-import io
 import logging
 
 def db_define(env):
@@ -17,7 +15,7 @@ def db_define(env):
   meta = MetaData(bind=engine)
 
   logger.info('Define table')
-  rec_orders = Table('rec_orders', meta,
+  Table('rec_orders', meta,
     Column('order_item_id', Integer, primary_key=True, autoincrement=True),
     Column('item_id', Integer, primary_key=False, autoincrement=False),
     Column('was_rec', Boolean, nullable=True),

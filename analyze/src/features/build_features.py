@@ -3,15 +3,16 @@ import numpy as np
 import logging
 import yaml
 
-def format_recommend(orders, count):
-  """ This function takes the InstaCart orders dataframe 
-  and returns formats the dataframe for the surprise 
-  recommendation library of the top `count` products sold by 
-  InstaCart for model and app simplicity. 
 
-  Args: 
+def format_recommend(orders, count):
+  """ This function takes the InstaCart orders dataframe
+  and returns formats the dataframe for the surprise
+  recommendation library of the top `count` products sold by
+  InstaCart for model and app simplicity.
+
+  Args:
     orders: Instacart order_products__train.csv
-    count (int): the number of items to include in the 
+    count (int): the number of items to include in the
     recommendation engine
 
   Returns:
