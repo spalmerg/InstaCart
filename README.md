@@ -42,22 +42,22 @@ Create the basic skeleton of a web app that implements a recommender system resp
    export USERNAME=XXX
    export PORT=XXX
    export PASSWORD=XXX
-   export HOST=XXX``` 
+   export HOST=XXX`
+   
+   export SECRET_KEY=XXX`` 
 
 6. Set your environment
 
    ```source instacart.env```
 
-7. Load database 
+7. Define database 
 
     ```python create_db.py```
     
-8. Create the model 
-
-   ```python model.py```
+8. Create features, keys, and model by running  ```make all``` from the ```analyze/``` directory
    
-9. Run the app
-
-   ```python instaApp.py```
+9. Run the app by running ```python application.py``` from the root directory
 
 You should be able to go to the IP address that it responds with and see your web app.
+
+To see what it should look like, visit [this link](http://instacart-dev.us-east-2.elasticbeanstalk.com/homepage)
