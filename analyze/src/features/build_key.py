@@ -11,6 +11,11 @@ def read_item_names(products, fit):
 
   Args: 
     products: the product csv from Instacart
+    fit: Surprise KNN model
+
+  Returns: 
+    A dictionary with product_id:product_name pairs of all items 
+    included in the training of the recommendation engine. 
     """
   logger.info('Make empty dictionary')
   rid_to_name = {}

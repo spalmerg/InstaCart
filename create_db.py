@@ -21,6 +21,7 @@ def db_define(env):
     Column('order_item_id', Integer, primary_key=True, autoincrement=True),
     Column('item_id', Integer, primary_key=False, autoincrement=False),
     Column('was_rec', Boolean, nullable=True),
+    Column('rec_from', Integer, nullable=True)
   )
 
   logger.info('Call create_all()')
@@ -28,14 +29,16 @@ def db_define(env):
 
 def add_order(order):
   """ This function takes a dictionary of order items
-  and adds the item id and whether or not it was a 
-  recommended item to the database
+  and adds the item id, whether or not it was a 
+  recommended item, and if so, what item it was recommended
+  for to the database
 
   Args:
-    order: a dictionary formatted item_id:bool which specifies the 
-    ordered item and whether or not it was recommended
+    order (dict): nested dictionary with format 
+    {item_id:{'was_rec':bool, 'rec_from':item_id}
 
   """
+  # set up connection
   connection = psycopg2.connect(
   dbname = os.getenv("DATABASE"),
   user = os.getenv("USERNAME"),
@@ -43,8 +46,11 @@ def add_order(order):
   host = os.getenv("HOST")
   )
   cur = connection.cursor()
+  #write each item in order to database
   for id in order.keys():
-    cur.execute("INSERT INTO rec_orders (item_id, was_rec) VALUES (%s,%s)", (id,order[id]))
+    cur.execute("INSERT INTO rec_orders (item_id, was_rec, rec_from) VALUES (%s,%s,%s)", \
+      (id,order[id]['was_rec'],order[id]['rec_from']))
+  # commit and close database connection 
   connection.commit()
   connection.close()
 

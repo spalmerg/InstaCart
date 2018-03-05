@@ -14,6 +14,7 @@ def build_recommender(data, model_meta):
 
   Args: 
     data: dataframe with columns order_id, product_id, and rating
+    model_meta: original model_meta dict
 
   """
   # import libraries in function to help EB 
@@ -27,18 +28,18 @@ def build_recommender(data, model_meta):
   reader = Reader(rating_scale = (max(data.rating),min(data.rating)))
 
   logging.info('Calling load_from_df')
-  data = Dataset.load_from_df(data, reader)
+  data = Dataset.load_from_df(data, reader) # reads and sets up data
 
   logging.info('Setting up recommender')
   k = model_meta['train_recommender']['neighbors']
   sim_options = model_meta['train_recommender']['sim_options']
-  knn = KNNBaseline(k, sim_options = sim_options)
+  knn = KNNBaseline(k, sim_options = sim_options) # collaborative filtering type
 
   logging.info('Calling build_full_trainset')
-  data = data.build_full_trainset()
+  data = data.build_full_trainset() # uses whole dataset to build model
 
   logging.info('Fit recommender')
-  fit = knn.fit(data)
+  fit = knn.fit(data) # fits model to data
 
   logging.info('Return recommender')
   return(fit)
@@ -51,23 +52,28 @@ def give_recommendation(model, raw_id, key):
   
   Args: 
     model: trained KNN model from surprise package
-    raw_id: the raw_id (InstCart ID) for the item
-    key: the product_id/product_name key dictionary
+    raw_id (str): the raw_id (InstCart ID) for the item
+    key (dict): the product_id:product_name key dictionary
 
   Returns: 
     Five recommendation items, five closest neighbors if known 
     item or five most popular items if unknown item. 
 
   """
+  #initialize dictionary to hold recommendations
   neighbors = {}
   try:
+    # translate instacart id to id created by Surprise
     inner_id = model.trainset.to_inner_iid(int(raw_id))
+    #find neighbors
     inner_rec = model.get_neighbors(inner_id, 5)
+    # get instacart ids for each Surpise id
     raw_recs = [model.trainset.to_raw_iid(inner_id) for inner_id in inner_rec]
+    #make instacart:item_name pairs 
     for rid in raw_recs:
       neighbors[str(rid)] = key[str(rid)]
     return(neighbors)
-  except: 
+  except: # if bad item selectd, turn into popular recommendation engine 
     return("RECOMMEND POPULAR ITEMS")
 
 
