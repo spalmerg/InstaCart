@@ -30,7 +30,7 @@ Create the basic skeleton of a web app that implements a recommender system resp
 
     ```pip install -r requirements.txt```
 
-5. Download InstaCart csv files from [Kaggle](https://www.kaggle.com/c/instacart-market-basket-analysis/data) and save to Data folder
+5. Download InstaCart csv files from [Kaggle](https://www.kaggle.com/c/instacart-market-basket-analysis/data) and save to ```analyze/data``` folder
 
 6. Set up instacart.env file with the following structure to connect to a database instance: 
 
