@@ -62,14 +62,14 @@ for to the database</p>
 <dl class="function">
 <dt id="build_features.format_recommend">
 <code class="descclassname">build_features.</code><code class="descname">format_recommend</code><span class="sig-paren">(</span><em>orders</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#build_features.format_recommend" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes the InstaCart orders dataframe 
-and returns formats the dataframe for the surprise 
-recommendation library of the top <cite>count</cite> products sold by 
+<dd><p>This function takes the InstaCart orders dataframe
+and returns formats the dataframe for the surprise
+recommendation library of the top <cite>count</cite> products sold by
 InstaCart for model and app simplicity.</p>
 <dl class="docutils">
-<dt>Args: </dt>
+<dt>Args:</dt>
 <dd>orders: Instacart order_products__train.csv
-count (int): the number of items to include in the 
+count (int): the number of items to include in the
 recommendation engine</dd>
 <dt>Returns:</dt>
 <dd>Dataframe with columns order_id, product_id, and rating</dd>
