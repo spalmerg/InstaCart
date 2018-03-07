@@ -38,13 +38,9 @@ def add_order(order):
 
   """
     # set up connection
-    print(os.getenv("DATABASE"))
-    print(os.getenv("USERNAME"))
-    print(os.getenv("PASSWORD"))
-    print(os.getenv("HOST"))
     connection = psycopg2.connect(
             dbname=os.getenv("DATABASE"),
-            user=os.getenv("USERNAME"),
+            user=os.getenv("DB_USERNAME"),
             password=os.getenv("PASSWORD"),
             host=os.getenv("HOST")
             )
@@ -72,7 +68,7 @@ if __name__ == "__main__":
     logger.info('Set up database connection')
     connection = psycopg2.connect(
       dbname=os.getenv("DATABASE"),
-      user=os.getenv("USERNAME"),
+      user=os.getenv("DB_USERNAME"),
       password=os.getenv("PASSWORD"),
       host=os.getenv("HOST")
       )
