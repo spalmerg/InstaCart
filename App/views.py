@@ -4,6 +4,7 @@ from App.forms import OrderForm, RecommendForm, FinalForm
 from analyze.src.models.model import give_recommendation
 import pickle
 import ast
+import psycopg2
 from create_db import add_order
 
 # load the recommender model
@@ -66,6 +67,6 @@ def thankyou():
     for id in session.keys():  # get and set items for form display
         order[id] = choices[id]
     form.set_choices(order.items())
-   # add_order(session)  # add order items to db
+    add_order(session)  # add order items to db
     session.clear()  # clear session from checkout
     return render_template('thankyou.html', form=form)
