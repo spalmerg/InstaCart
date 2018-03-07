@@ -66,6 +66,6 @@ def thankyou():
     for id in session.keys():  # get and set items for form display
         order[id] = choices[id]
     form.set_choices(order.items())
-    add_order(session)  # add order items to db
+   # add_order(session)  # add order items to db
     session.clear()  # clear session from checkout
     return render_template('thankyou.html', form=form)
