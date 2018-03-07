@@ -38,6 +38,10 @@ def add_order(order):
 
   """
     # set up connection
+    print(os.getenv("DATABASE"))
+    print(os.getenv("USERNAME"))
+    print(os.getenv("PASSWORD"))
+    print(os.getenv("HOST"))
     connection = psycopg2.connect(
             dbname=os.getenv("DATABASE"),
             user=os.getenv("USERNAME"),
