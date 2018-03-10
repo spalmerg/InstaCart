@@ -15,13 +15,17 @@ def read_item_names(products, fit):
         A dictionary with product_id:product_name pairs of all items included
         in the training of the recommendation engine.
     """
+    log_fmt = '%(asctime)s -  %(levelname)s - %(message)s'
+    logging.basicConfig(filename='setup.log', level=logging.INFO,
+                        format=log_fmt)
+    logger = logging.getLogger(__name__)
     logger.info('Make empty dictionary')
     rid_to_name = {}
     logger.info('Begin looping through products')
     for i in range(0, len(products)):
         try:
             if fit.trainset.knows_item(fit.trainset.to_inner_iid(products.product_id[i])):
-                rid_to_name[str(products.product_id[i])]=products.product_name[i]
+                rid_to_name[str(products.product_id[i])] = products.product_name[i]
         except:
             pass
     logger.info('Return key dictionary')

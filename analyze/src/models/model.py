@@ -68,7 +68,7 @@ def give_recommendation(model, raw_id, key):
         for rid in raw_recs:  # make instacart:item_name pairs
             neighbors[str(rid)] = key[str(rid)]
         return(neighbors)
-    except:  # if bad item selectd, turn into popular recommendation engine
+    except:  # if bad item selected, turn into popular recommendation engine
         return("RECOMMEND POPULAR ITEMS")
 
 
