@@ -1,9 +1,6 @@
 # InstaCart Recommender 
 Analytics Value Chain Project
 
-## Project Objective
-Create the basic skeleton of a web app that implements a recommender system responding to user input. 
-
 ## Project Charter
 Make recommendations for items a user may want to buy based on the items they are adding to their shopping cart to anticipate items they may want to add, increase app engagement, and ultimately increase order size.
 
