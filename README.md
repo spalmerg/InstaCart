@@ -1,8 +1,20 @@
 # InstaCart Recommender 
 Analytics Value Chain Project
 
-## Objective
+## Project Objective
 Create the basic skeleton of a web app that implements a recommender system responding to user input. 
+
+## Project Charter
+Make recommendations for items a user may want to buy based on the items they are adding to their shopping cart to anticipate items they may want to add, increase app engagement, and ultimately increase order size.
+
+### Vision
+Increase app engagement, identify desired items, and ultimately increase order size
+
+### Mission
+Increase order size by using recommendations from the user?s current shopping list to suggest missing items or items that the user may want to try, and make adding such items to the shopping list highly accessible to the user
+
+### Success Criteria 
+User feedback and assessment logical order product sets
 
 ## Package requirements
 * [Flask](http://flask.pocoo.org/docs/0.12/)
