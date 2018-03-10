@@ -11,8 +11,7 @@ def format_recommend(orders, count):
 
     Args:
         orders: Instacart order_products__train.csv
-        count (int): the number of items to include in the recommendation
-            engine
+        count (int): the number of items to include in the recommendation engine
 
   Returns:
     Dataframe with columns order_id, product_id, and rating
