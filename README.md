@@ -67,8 +67,8 @@ User feedback and assessment logical order product sets
 
 9. Run tests on code
 
-    ```cd analyze/tests
-    pytest```
+    ```cd analyze/tests```
+    ```pytest```
    
 10. Run the app by running ```python application.py``` from the root directory
 
