@@ -64,8 +64,13 @@ User feedback and assessment logical order product sets
     ```python create_db.py```
     
 8. Create features, keys, and model by running  ```make all``` from the ```analyze/``` directory
+
+9. Run tests on code
+
+```cd analyze/tests
+pytest ```
    
-9. Run the app by running ```python application.py``` from the root directory
+10. Run the app by running ```python application.py``` from the root directory
 
 You should be able to go to the IP address that it responds with and see your web app.
 
