@@ -80,6 +80,6 @@ To see what it should look like, visit [this link](http://instacart-dev.us-east-
 
 [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2142049)
 
-Project Developer: Sarah Greenwood
-Project Manager: Logan Wilson
+Project Developer: Sarah Greenwood,
+Project Manager: Logan Wilson,
 QA: Jill Fan
