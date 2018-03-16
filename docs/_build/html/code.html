@@ -33,9 +33,22 @@
   <div class="section" id="module-create_db">
 <span id="data-ingestion-and-model-fitting"></span><h1>Data ingestion and model fitting<a class="headerlink" href="#module-create_db" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
+<dt id="create_db.add_order">
+<code class="descclassname">create_db.</code><code class="descname">add_order</code><span class="sig-paren">(</span><em>order</em><span class="sig-paren">)</span><a class="headerlink" href="#create_db.add_order" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function takes a dictionary of order items and adds the item id,
+whether or not it was a recommended item, and if so, what item it was
+recommended for to the database</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd>order (dict): nested dictionary with format
+{item_id:{‘was_rec’:bool, ‘rec_from’:item_id}</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="create_db.db_define">
 <code class="descclassname">create_db.</code><code class="descname">db_define</code><span class="sig-paren">(</span><em>env</em><span class="sig-paren">)</span><a class="headerlink" href="#create_db.db_define" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class defines the database schema</p>
+<dd><p>This function defines the database schema</p>
 <dl class="docutils">
 <dt>Args:</dt>
 <dd>env: database connection object</dd>
@@ -48,13 +61,16 @@
 <dl class="function">
 <dt id="build_features.format_recommend">
 <code class="descclassname">build_features.</code><code class="descname">format_recommend</code><span class="sig-paren">(</span><em>orders</em>, <em>count</em><span class="sig-paren">)</span><a class="headerlink" href="#build_features.format_recommend" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes the InstaCart orders dataframe 
-and returns formats the dataframe for the surprise 
-recommendation library of the top 853 products sold by 
-InstaCart for model and app simplicity.</p>
-<dl class="docutils">
-<dt>Args: </dt>
-<dd>orders(csv): Instacart order_products__train.csv</dd>
+<dd><dl class="docutils">
+<dt>This function takes the InstaCart orders dataframe and returns formats</dt>
+<dd><p class="first">the dataframe for the surprise recommendation library of the top <cite>count</cite>
+products sold by InstaCart for model and app simplicity.</p>
+<dl class="last docutils">
+<dt>Args:</dt>
+<dd>orders: Instacart order_products__train.csv
+count (int): the number of items to include in the recommendation engine</dd>
+</dl>
+</dd>
 <dt>Returns:</dt>
 <dd>Dataframe with columns order_id, product_id, and rating</dd>
 </dl>
@@ -63,11 +79,15 @@ InstaCart for model and app simplicity.</p>
 <span class="target" id="module-build_key"></span><dl class="function">
 <dt id="build_key.read_item_names">
 <code class="descclassname">build_key.</code><code class="descname">read_item_names</code><span class="sig-paren">(</span><em>products</em>, <em>fit</em><span class="sig-paren">)</span><a class="headerlink" href="#build_key.read_item_names" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function reads the products table returns a 
-dictionary formatted as key=product_id:value=product_name</p>
+<dd><p>This function reads the products table returns a dictionary formatted
+as key=product_id:value=product_name</p>
 <dl class="docutils">
-<dt>Args: </dt>
-<dd>products: the product csv from Instacart</dd>
+<dt>Args:</dt>
+<dd>products: the product csv from Instacart
+fit: Surprise KNN model</dd>
+<dt>Returns:</dt>
+<dd>A dictionary with product_id:product_name pairs of all items included
+in the training of the recommendation engine.</dd>
 </dl>
 </dd></dl>
 
@@ -76,30 +96,31 @@ dictionary formatted as key=product_id:value=product_name</p>
 <span id="model-building-and-use"></span><h1>Model building and use<a class="headerlink" href="#module-model" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
 <dt id="model.build_recommender">
-<code class="descclassname">model.</code><code class="descname">build_recommender</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#model.build_recommender" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes order, item, and rating data returns a
-KNN recommendation engine.</p>
-<dl class="docutils">
-<dt>Args: </dt>
-<dd>data: dataframe with columns order_id, product_id, and rating</dd>
+<code class="descclassname">model.</code><code class="descname">build_recommender</code><span class="sig-paren">(</span><em>data</em>, <em>model_meta</em><span class="sig-paren">)</span><a class="headerlink" href="#model.build_recommender" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>This function takes order, item, and rating data returns a</dt>
+<dd>KNN recommendation engine.</dd>
+<dt>Args:</dt>
+<dd>data: dataframe with columns order_id, product_id, and rating
+model_meta: original model_meta dict</dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="model.give_recommendation">
 <code class="descclassname">model.</code><code class="descname">give_recommendation</code><span class="sig-paren">(</span><em>model</em>, <em>raw_id</em>, <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#model.give_recommendation" title="Permalink to this definition">¶</a></dt>
-<dd><p>This function takes a KNN model and a raw_id as input 
-and returns the five nearest neighbors to the original item 
-if the item was in the training set or the five most popular
-items if the original item was not in the training set.</p>
+<dd><p>This function takes a KNN model and a raw_id as input and returns the
+five nearest neighbors to the original item if the item was in the training
+set or the five most popular items if the original item was not in the
+training set.</p>
 <dl class="docutils">
-<dt>Args: </dt>
+<dt>Args:</dt>
 <dd>model: trained KNN model from surprise package
-raw_id: the raw_id (InstCart ID) for the item
-key: the product_id/product_name key dictionary</dd>
-<dt>Returns: </dt>
-<dd>Five recommendation items, five closest neighbors if known 
-item or five most popular items if unknown item.</dd>
+raw_id (str): the raw_id (InstCart ID) for the item
+key (dict): the product_id:product_name key dictionary</dd>
+<dt>Returns:</dt>
+<dd>Five recommendation items, five closest neighbors if known item or five
+most popular items if unknown item.</dd>
 </dl>
 </dd></dl>
 
