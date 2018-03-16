@@ -79,3 +79,7 @@ You should be able to go to the IP address that it responds with and see your we
 To see what it should look like, visit [this link](http://instacart-dev.us-east-2.elasticbeanstalk.com/homepage)
 
 [Pivotal Tracker](https://www.pivotaltracker.com/n/projects/2142049)
+
+Project Developer: Sarah Greenwood
+Project Manager: Logan Wilson
+QA: Jill Fan
